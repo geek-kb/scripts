@@ -73,7 +73,8 @@
           "docker run -d -p 80:80 -t camelel/django\n",
           "PublicIP=$(curl -s noc.co.il | grep Visitor | awk -F: '{print $2}' | cut -d, -f1 | tr -d \")\n",
           "ContID=$(docker ps -a | grep camelel | awk '{print $1}')\n",
-          "docker exec $ContID sed 's/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['$PublicIP']/g'\n",
+          "PublicIP=$PublicIP\n",
+          "docker exec $ContID sed 's/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['$PublicIP']/g' /root/project/django/mysite/mysite/settings.py\n",
           ]] }},
         "BlockDeviceMappings" : [ {
           "DeviceName" : "/dev/sda1",

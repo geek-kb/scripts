@@ -70,6 +70,7 @@
           "apt-get -y install lynx docker.io\n",
           "ln -sf /usr/bin/docker.io /usr/local/bin/docker\n",
           "usermod -a -G docker ubuntu\n",
+          "# Run docker container\n",
           "docker run -d -p 80:80 -t camelel/django\n",
           ]] }},
         "BlockDeviceMappings" : [ {

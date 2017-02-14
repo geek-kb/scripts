@@ -35,7 +35,7 @@
 
   "Resources" : {
 
-    "Server" : {
+    "DockerHost" : {
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
@@ -71,7 +71,23 @@
           "DeviceName" : "/dev/sda",
           "VirtualName" : "ephemeral0"
         } ]
-      }
+      },
+      "DependsOn" : "LinuxServer"
+    },
+
+    "LinuxServer" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "InstanceType" : { "Ref" : "InstanceType" },
+        "SecurityGroups" : [ { "Ref" : "ServerSecurityGroup" } ],
+        "KeyName" : { "Ref" : "KeyName" },
+        "BlockDeviceMappings" : [ {
+          "DeviceName" : "/dev/sda",
+          "VirtualName" : "ephemeral0"
+        } ]
+      },
     },
 
     "ServerSecurityGroup" : {
@@ -87,21 +103,29 @@
   },
 
   "Outputs" : {
-    "ServerAddress" : {
-      "Value" : { "Fn::GetAtt" : [ "Server", "PublicDnsName" ] },
-      "Description" : "Server Domain Name"
+    "DockerHostAddress" : {
+      "Value" : { "Fn::GetAtt" : [ "DockerHost", "PublicDnsName" ] },
+      "Description" : "DockerHost Server Domain Name"
+    },
+    "DockerHostPublicIp" : {
+      "Value" : { "Fn::GetAtt" : [ "DockerHost", "PublicIp" ]},
+      "Description" : "DockerHost Server PublicIp Address"
+    },
+    "LinuxServerAddress" : {
+      "Value" : { "Fn::GetAtt" : [ "LinuxServer", "PublicDnsName" ] },
+      "Description" : "LinuxServer Domain Name"
+    },
+    "LinuxServerPublicIp" : {
+      "Value" : { "Fn::GetAtt" : [ "LinuxServer", "PublicIp" ]},
+      "Description" : "LinuxServer PublicIp Address"
     },
     "SecurityGroup" : {
       "Value" : { "Fn::GetAtt" : [ "ServerSecurityGroup", "GroupId" ] },
       "Description" : "Server Security Group Id"
     },
-    "PublicIp" : {
-      "Value" : { "Fn::GetAtt" : [ "Server", "PublicIp" ]},
-      "Description" : "Server PublicIp Address"
-    },
     "AvailabilityZone" : {
-      "Value" : { "Fn::GetAtt" : [ "Server", "AvailabilityZone" ]},
-      "Description" : "Server Availability Zone"
+      "Value" : { "Fn::GetAtt" : [ "DockerHost", "AvailabilityZone" ]},
+      "Description" : "DockerHost Availability Zone"
     },
   }
 }

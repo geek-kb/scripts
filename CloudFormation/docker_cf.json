@@ -103,7 +103,15 @@
     },
     "PublicIp" : {
       "Value" : { "Fn::GetAtt" : [ "Server", "PublicIp" ]},
-      "Description" : "Server's PublicIp Address"
+      "Description" : "Server PublicIp Address"
+    },
+    "AvailabilityZone" : {
+      "Value" : { "Fn::GetAtt" : [ "Server", "AvailabilityZone" ]},
+      "Description" : "Server Availability Zone"
+    },
+    "PublicDnsName" : {
+      "Value" : { "Fn::GetAtt" : [ "Server", "PublicDnsName" ]},
+      "Description" : "Server PublicDnsName"
     },
   }
 }

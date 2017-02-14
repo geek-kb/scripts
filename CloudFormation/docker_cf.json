@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "Run an Ubuntu 14.04 LTS server with Docker.",
+  "Description" : "Runs an Ubuntu 14.04 LTS server with Docker and pulls a django image from Hub.",
 
   "Parameters": {
     "InstanceType" : {

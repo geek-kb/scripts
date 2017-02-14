@@ -71,7 +71,7 @@
           "ln -sf /usr/bin/docker.io /usr/local/bin/docker\n",
           "usermod -a -G docker ubuntu\n",
           "# Run docker container\n",
-          "docker run -d -p 80:80 -t camelel/django\n",
+          "docker run -d -p 80:80 -t camelel/django:allowed\n",
           ]] }},
         "BlockDeviceMappings" : [ {
           "DeviceName" : "/dev/sda1",
@@ -83,9 +83,10 @@
     "ServerSecurityGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
-        "GroupDescription" : "Docker Server Security Group - Allows connection from Tikal only",
+        "GroupDescription" : "Docker Server Security Group",
         "SecurityGroupIngress" : [
-          { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"}
+          { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"},
+          { "IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"}
         ]
       }
     }

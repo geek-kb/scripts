@@ -14,12 +14,6 @@
       "Description" : "The EC2 Key Pair to allow SSH access to the instances",
       "Type" : "String"
     },
-    "EBSSize" : {
-      "Description" : "Size of EBS Drive (in Gigabytes)",
-      "Default" : "10",
-      "Type" : "Number",
-      "MinValue": "8"
-    }
   },
 
   "Mappings" : {
@@ -74,8 +68,8 @@
           "docker run -d -p 80:80 -t camelel/django:allowed\n",
           ]] }},
         "BlockDeviceMappings" : [ {
-          "DeviceName" : "/dev/sda1",
-          "Ebs" : { "VolumeSize" : { "Ref" : "EBSSize" } }
+          "DeviceName" : "/dev/sda",
+          "VirtualName" : "ephemeral0"
         } ]
       }
     },

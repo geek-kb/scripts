@@ -109,9 +109,5 @@
       "Value" : { "Fn::GetAtt" : [ "Server", "AvailabilityZone" ]},
       "Description" : "Server Availability Zone"
     },
-    "PublicDnsName" : {
-      "Value" : { "Fn::GetAtt" : [ "Server", "PublicDnsName" ]},
-      "Description" : "Server PublicDnsName"
-    },
   }
 }

@@ -60,10 +60,14 @@
           "echo 'exit 0' >> /etc/network/if-pre-up.d/iptablesload\n",
           "chmod a+x /etc/network/if-pre-up.d/iptablesload\n",
 
-          "# Install Docker\n",
-          "apt-get -y install lynx docker.io\n",
+          "# Install Packages\n",
+          "apt-get -y install lynx docker.io figlet\n",
           "ln -sf /usr/bin/docker.io /usr/local/bin/docker\n",
           "usermod -a -G docker ubuntu\n",
+
+          "# Set motd\n",
+          "figlet Tikal > /etc/motd\n",
+
           "# Run docker container\n",
           "docker run -d -p 80:80 -t camelel/django:allowed\n",
           ]] }},
@@ -72,10 +76,10 @@
           "VirtualName" : "ephemeral0"
         } ]
       },
-      "DependsOn" : "LinuxServer"
+      "DependsOn" : "LinuxInstance"
     },
 
-    "LinuxServer" : {
+    "LinuxInstance" : {
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
@@ -86,7 +90,7 @@
         "BlockDeviceMappings" : [ {
           "DeviceName" : "/dev/sda",
           "VirtualName" : "ephemeral0"
-        } ]
+        } ],
       },
     },
 
@@ -111,13 +115,13 @@
       "Value" : { "Fn::GetAtt" : [ "DockerHost", "PublicIp" ]},
       "Description" : "DockerHost Server PublicIp Address"
     },
-    "LinuxServerAddress" : {
-      "Value" : { "Fn::GetAtt" : [ "LinuxServer", "PublicDnsName" ] },
-      "Description" : "LinuxServer Domain Name"
+    "LinuxInstanceAddress" : {
+      "Value" : { "Fn::GetAtt" : [ "LinuxInstance", "PublicDnsName" ] },
+      "Description" : "LinuxInstance Domain Name"
     },
-    "LinuxServerPublicIp" : {
-      "Value" : { "Fn::GetAtt" : [ "LinuxServer", "PublicIp" ]},
-      "Description" : "LinuxServer PublicIp Address"
+    "LinuxInstancePublicIp" : {
+      "Value" : { "Fn::GetAtt" : [ "LinuxInstance", "PublicIp" ]},
+      "Description" : "LinuxInstance PublicIp Address"
     },
     "SecurityGroup" : {
       "Value" : { "Fn::GetAtt" : [ "ServerSecurityGroup", "GroupId" ] },

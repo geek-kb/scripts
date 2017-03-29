@@ -1,4 +1,4 @@
 node {
 CWD=pwd()
-print ${CWD}
+print CWD
 }

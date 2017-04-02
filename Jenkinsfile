@@ -1,6 +1,7 @@
 channel = "#general"
+
 try {
-	stage ('test') {
+	stage ('Downloading project') {
 		node {
 			CWD = pwd()
 			print CWD

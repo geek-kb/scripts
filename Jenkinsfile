@@ -16,14 +16,14 @@ def slackSend(color) {
 try {
 	stage ('test') {
 		node {
-			CWD=pwd()
+			CWD = pwd()
 			print CWD
 			checkout scm
 		}
 	}
 } catch (err) {
 		currentBuild.result = 'FAILURE'
-		color='danger'
+		color = 'danger'
 		slackSend(danger)
 		}
 
@@ -33,7 +33,7 @@ stage ('whatever') {
 
 if ("${currentBuild.result}"=='null') {
 	currentBuild.result = 'SUCCESS'
-	color='good'
+	color = 'good'
 	print "Current build result: ${currentBuild.result}"
 	slackSend(good)
 }

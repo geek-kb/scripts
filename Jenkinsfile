@@ -1,8 +1,4 @@
 channel = "#general"
-		slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
-		message: "${message} ${env.JOB_NAME}*! :x: (<!here|here>)"
-}
-
 try {
 	stage ('test') {
 		node {

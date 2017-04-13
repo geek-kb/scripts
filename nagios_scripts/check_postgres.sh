@@ -1,0 +1,75 @@
+#!/bin/bash
+# This script uses the check_postgres.pl script and requires providing database name and action.
+# Script by Itai Ganot 2015.
+DBNAME=$1
+ACTION=$2
+PERL="/usr/bin/perl"
+SCRIPT="/usr/lib64/nagios/plugins/check_postgres.pl"
+function usage {
+echo "Usage: $0 DBNAME Action"
+echo ""
+echo "Available Actions:"
+echo "Which test is determined by the --action option, or by the name of the program"
+echo " archive_ready         - Check the number of WAL files ready in the pg_xlog/archive_status"
+echo " autovac_freeze        - Checks how close databases are to autovacuum_freeze_max_age."
+echo " backends              - Number of connections, compared to max_connections."
+echo " bloat                 - Check for table and index bloat."
+echo " checkpoint            - Checks how long since the last checkpoint"
+echo " commitratio           - Report if the commit ratio of a database is too low."
+echo " connection            - Simple connection check."
+echo " custom_query          - Run a custom query."
+echo " database_size         - Report if a database is too big."
+echo " dbstats               - Returns stats from pg_stat_database: Cacti output only"
+echo " disabled_triggers     - Check if any triggers are disabled"
+echo " disk_space            - Checks space of local disks Postgres is using."
+echo " fsm_pages             - Checks percentage of pages used in free space map."
+echo " fsm_relations         - Checks percentage of relations used in free space map."
+echo " hitratio              - Report if the hit ratio of a database is too low."
+echo " hot_standby_delay     - Check the replication delay in hot standby setup"
+echo " index_size            - Checks the size of indexes only."
+echo " last_analyze          - Check the maximum time in seconds since any one table has been analyzed."
+echo " last_autoanalyze      - Check the maximum time in seconds since any one table has been autoanalyzed."
+echo " last_autovacuum       - Check the maximum time in seconds since any one table has been autovacuumed."
+echo " last_vacuum           - Check the maximum time in seconds since any one table has been vacuumed."
+echo " listener              - Checks for specific listeners."
+echo " locks                 - Checks the number of locks."
+echo " logfile               - Checks that the logfile is being written to correctly."
+echo " new_version_bc        - Checks if a newer version of Bucardo is available."
+echo " new_version_box       - Checks if a newer version of boxinfo is available."
+echo " new_version_cp        - Checks if a newer version of check_postgres.pl is available."
+echo " new_version_pg        - Checks if a newer version of Postgres is available."
+echo " new_version_tnm       - Checks if a newer version of tail_n_mail is available."
+echo " pgb_pool_cl_active    - Check the number of active clients in each pgbouncer pool."
+echo " pgb_pool_cl_waiting   - Check the number of waiting clients in each pgbouncer pool."
+echo " pgb_pool_maxwait      - Check the current maximum wait time for client connections in pgbouncer pools."
+echo " pgb_pool_sv_active    - Check the number of active server connections in each pgbouncer pool."
+echo " pgb_pool_sv_idle      - Check the number of idle server connections in each pgbouncer pool."
+echo " pgb_pool_sv_login     - Check the number of login server connections in each pgbouncer pool."
+echo " pgb_pool_sv_tested    - Check the number of tested server connections in each pgbouncer pool."
+echo " pgb_pool_sv_used      - Check the number of used server connections in each pgbouncer pool."
+echo " pgbouncer_backends    - Check how many clients are connected to pgbouncer compared to max_client_conn."
+echo " pgbouncer_checksum    - Check that no pgbouncer settings have changed since the last check."
+echo " prepared_txns         - Checks number and age of prepared transactions."
+echo " query_runtime         - Check how long a specific query takes to run."
+echo " query_time            - Checks the maximum running time of current queries."
+echo " relation_size         - Checks the size of tables and indexes."
+echo " replicate_row         - Verify a simple update gets replicated to another server."
+echo " same_schema           - Verify that two databases have the exact same tables, columns, etc."
+echo " sequence              - Checks remaining calls left in sequences."
+echo " settings_checksum     - Check that no settings have changed since the last check."
+echo " slony_status          - Ensure Slony is up to date via sl_status."
+echo " table_size            - Checks the size of tables only."
+echo " timesync              - Compare database time to local system time."
+echo " txn_idle              - Checks the maximum "idle in transaction" time."
+echo " txn_time              - Checks the maximum open transaction time."
+echo " txn_wraparound        - See how close databases are getting to transaction ID wraparound."
+echo " version               - Check for proper Postgres version."
+echo " wal_files             - Check the number of WAL files in the pg_xlog directory"
+}
+if [[ -z "$1" ]]; then
+usage
+elif [[ "$1" = "help" ]] || [[ -z "$2" ]]; then
+usage
+else
+$PERL /usr/lib64/nagios/plugins/check_postgres.pl --host=localhost --port=5432 --dbname="$DBNAME" --dbuser=postgres --dbpass=postgres --action=$ACTION
+fi

@@ -1,0 +1,48 @@
+---
+#- include_vars: vault.yml
+#  tags: g2fa_server_side
+
+- name: Install google-authenticator package
+  apt:  name="libpam-google-authenticator" state=installed
+  sudo: yes
+  tags: g2fa_server_side
+
+- name: Add pam_google_authenticator module to /etc/pam.d/sshd
+  lineinfile: dest=/etc/pam.d/sshd line="auth required pam_google_authenticator.so nullok" insertafter="^# PAM configuration" state=present
+  sudo: yes
+  tags: g2fa_server_side
+
+- name: Comment common-auth in /etc/pam.d/sshd
+  lineinfile: dest=/etc/pam.d/sshd regexp='(.*)include common-auth' line='#@include common-auth'
+  sudo: yes
+  tags: g2fa_server_side
+
+- name: Enable ChallangeResponseAuthentication in /etc/ssh/sshd_config
+  lineinfile: dest=/etc/ssh/sshd_config regexp='^ChallengeResponseAuthentication(.*)' line='ChallengeResponseAuthentication yes'
+  sudo: yes
+  tags: g2fa_server_side
+
+- name: Disable PasswordAuthentication in /etc/ssh/sshd_config
+  lineinfile: dest=/etc/ssh/sshd_config regexp='^PasswordAuthentication(.*)' line='PasswordAuthentication no'
+  sudo: yes
+  tags: g2fa_server_side
+
+- name: Ensure google authentication group exists
+  group: name={{ google_authenticator_group }} state=present
+  sudo: yes
+
+- name: Enforce google_2fa on Group
+  lineinfile: dest=/etc/ssh/sshd_config state=present line='Match Group {{ google_authenticator_group }}' insertafter='^UsePAM$'
+  sudo: yes
+  tags: g2fa_server_side
+
+- name: Enforce google_2fa group to supply both publickey and authenticator
+  lineinfile: dest=/etc/ssh/sshd_config state=present line='    AuthenticationMethods publickey,keyboard-interactive' insertafter='^Match Group {{ google_authenticator_group }}$'
+  sudo: yes
+  notify: restart ssh
+  tags: g2fa_server_side
+
+- name: Create emergency user
+  user: name={{ google_authenticator_rescue_user }} shell=/bin/bash groups=sudo append=yes generate_ssh_key=yes state=present password={{ google_authenticator_rescue_password }}
+  sudo: yes
+  tags: g2fa_server_side

@@ -1,0 +1,4 @@
+---
+google_authenticator_secret_file_location: "/home/{{ ansible_ssh_user }}/.google_authenticator"
+google_authenticator_group: "gauth"
+google_authenticator_rescue_user: "rescue"

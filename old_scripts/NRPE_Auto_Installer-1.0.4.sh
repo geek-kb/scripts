@@ -26,7 +26,7 @@ YUMREPOS="/etc/yum.repos.d" # Yum repository path
 SCP="$(which scp) -r" # scp path
 NGUSER="nagios" # Nagios user	
 NGGROUP="nagios" # Nagios group
-NAGIOSSRV="10.13.0.7" # Nagios server IP address
+NAGIOSSRV="10.13.0.11" # Nagios server IP address
 NRPEPORT="5666" # NRPE port
 XINETDFILE="/etc/xinetd.d/nrpe" # Xinetd file
 NRPEPIDFILE="/var/run/nrpe/nrpe.pid" # NRPE pid file
@@ -72,7 +72,6 @@ else
 	ARCH="32"
 fi
 
-# Checking if EPEL repo is installed
 if [ ! -e $YUMREPOS/epel.repo ] ;
 	then echo "EPEL repo is not installed."
 	read -r -p "Would you like to add it? [y/n] " EPEL 
@@ -91,7 +90,7 @@ if [ ! -e $YUMREPOS/epel.repo ] ;
 			/bin/sed -i 's/https/http/g' "$YUMREPOS"/epel.repo
 			fi
 	fi
-echo "Installing required packages..."
+echo "Installing required packages"
 yum install -y nagios-plugins-nrpe nrpe openssl glibc openssl098e-0.9.8e-18.el6_5.2.x86_64 openssl098e-0.9.8e-18.el6_5.2.i686
 
 case "$ARCH" in
@@ -169,8 +168,6 @@ command[check_dell_warning]=$NGPLUGINS32/check_openmanage --only warning
 command[check_openmanage]=$NGPLUGINS32/check_openmanage
 command[check_kvm]=sudo $NGPLUGINS32/check_kvm
 EOF
-
-# Configuring Nagios user access and permissions
 echo "Adding user $NGUSER to $SUDOERS"
 echo "Defaults:$NGUSER !requiretty" >> $SUDOERS
 echo "nagios ALL = NOPASSWD:$NGPLUGINS32/*" >> $SUDOERS
@@ -253,7 +250,6 @@ command[check_dell_warning]=$NGPLUGINS64/check_openmanage --only warning
 command[check_openmanage]=$NGPLUGINS64/check_openmanage
 command[check_kvm]=sudo $NGPLUGINS64/check_kvm
 EOF
-# Configuring Nagios user access and permissions
 echo "Adding user $NGUSER to $SUDOERS"
 echo "Defaults:$NGUSER !requiretty" >> $SUDOERS
 echo "nagios ALL = NOPASSWD:$NGPLUGINS64/*" >> $SUDOERS

@@ -3,8 +3,6 @@ pipeline {
 	options { disableConcurrentBuilds() }
 	environment {
 		channel = "#general"
-	}
-	parameters {
         	string(name: 'PERSON', defaultValue: 'Itai Ganot', description: 'Who should I say hello to?')
 	}
 	stages {
@@ -17,7 +15,7 @@ pipeline {
 							sh(returnStdout: true, script: """
 								ls -l
 								git branch
-								echo "Hello ${params.PERSON}"
+								echo "Hello ${env.PERSON}"
 							""").trim()
 						}
 					} catch (err) {

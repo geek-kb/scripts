@@ -30,8 +30,10 @@ pipeline {
 		}
 		stage ('whatever') {
 			steps {
-				currentBuild.displayName = "# ${BUILD_NUMBER} | ${BRANCH_NAME}"
-			}
+				script {
+					currentBuild.displayName = "# ${BUILD_NUMBER} | ${BRANCH_NAME}"
+				}
+			}	
 		}
 			
 		stage ('results') {

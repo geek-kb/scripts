@@ -3,8 +3,8 @@ pipeline {
 	options { disableConcurrentBuilds() }
 	stages {
 		stage('Setup'){
-			channel = "#general"
 			stage ('Downloading project') {
+			channel = "#general"
 				try {
 					node {
 						checkout scm

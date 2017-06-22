@@ -42,7 +42,7 @@ pipeline {
 					credentialsId: jenkins_creds, usernameVariable: 'J_USER', 
 					passwordVariable: 'J_PASS'], 
 					]){
-					cmd = "curl -s --insecure -u ${J_USER}:${J_PASS} ${BUILD_URL}api/json | python -mjson.tool | grep fullName | awk 'NR==1' | cut -d'\"' -f4 "
+					cmd = "curl -s --insecure -u ${J_USER}:${J_PASS} ${BUILD_URL}api/json | python -mjson.tool | grep fullName | awk 'NR==1' | cut -d'\"' -f4 | tr -d '\n' "
 					issuer = sh(returnStdout: true, script: cmd)
 					}
 					
@@ -50,6 +50,7 @@ pipeline {
 						currentBuild.result = 'SUCCESS'
 						slackSend channel: channel, color: 'good', teamDomain: null, token: null,
 						message: "*Pipeline built successfully by ${issuer}!* ${env.JOB_NAME}*! (<!here|here>)"
+					echo "Pipeline finished successfully, started by ${issuer}!"
 					}
 				}
 			}

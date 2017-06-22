@@ -3,20 +3,20 @@ pipeline {
 	options { disableConcurrentBuilds() }
 	stages {
 		stage ('Downloading project') {
+			environment {
+				channel = "#general"
+			}
 			steps {
-				environment {
-					channel = "#general"
-				}
-					try {
-						node {
-							checkout scm
-						}
-					} catch (err) {
-						currentBuild.result = 'FAILURE'
-						slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
-						message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
+				try {
+					node {
+						checkout scm
 					}
+				} catch (err) {
+					currentBuild.result = 'FAILURE'
+					slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
+					message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
 				}
+			}
 		}	
 		stage ('whatever') {
 			steps {

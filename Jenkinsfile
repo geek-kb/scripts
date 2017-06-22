@@ -3,7 +3,7 @@ pipeline {
 	options { disableConcurrentBuilds() }
 	stages {
 		stage ('Downloading project') {
-			step {
+			steps {
 				channel = "#general"
 				try {
 					node {
@@ -17,13 +17,13 @@ pipeline {
 			}
 		}	
 		stage ('whatever') {
-			step {
+			steps {
 				print "Current build result: ${currentBuild.result}"
 			}
 		}
 		
 		stage ('results') {
-			step {
+			steps {
 				if (!currentBuild.result) {
 					currentBuild.result = 'SUCCESS'
 					slackSend channel: channel, color: 'good', teamDomain: null, token: null,

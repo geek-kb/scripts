@@ -16,6 +16,7 @@ pipeline {
 							checkout scm
 							sh(returnStdout: true, script: """
 								ls -l
+								git branch
 								echo "Hello ${params.PERSON}"
 							""").trim()
 						}
@@ -29,8 +30,7 @@ pipeline {
 		}
 		stage ('whatever') {
 			steps {
-				print "Current build result: ${currentBuild.result}"
-			}
+				currentBuild.displayName = "# ${BUILD_NUMBER} | ${BRANCH_NAME}"
 		}
 			
 		stage ('results') {

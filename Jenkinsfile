@@ -3,7 +3,7 @@ pipeline {
 	options { disableConcurrentBuilds() }
 	environment {
 		channel = "#general"
-        	string(name: 'PERSON', defaultValue: 'Itai Ganot', description: 'Who should I say hello to?')
+        	def PERSON = "Itai Ganot"
 	}
 	stages {
 		stage ('Downloading project') {

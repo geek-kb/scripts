@@ -11,7 +11,7 @@ pipeline {
 					try {
 						node {
 							checkout scm
-							sh(returnStdout: true, script: ls -l)
+							sh(returnStdout: true, script: "ls -l").trim()
 						}
 					} catch (err) {
 						currentBuild.result = 'FAILURE'

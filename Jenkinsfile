@@ -29,10 +29,12 @@ pipeline {
 			
 		stage ('results') {
 			steps {
-				if (!currentBuild.result) {
-					currentBuild.result = 'SUCCESS'
-					slackSend channel: channel, color: 'good', teamDomain: null, token: null,
-					message: "*Pipeline built successfully!* ${env.JOB_NAME}*! (<!here|here>)"
+				script {
+					if (!currentBuild.result) {
+						currentBuild.result = 'SUCCESS'
+						slackSend channel: channel, color: 'good', teamDomain: null, token: null,
+						message: "*Pipeline built successfully!* ${env.JOB_NAME}*! (<!here|here>)"
+					}
 				}
 			}
 		}

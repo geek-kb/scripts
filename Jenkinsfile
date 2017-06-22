@@ -1,5 +1,5 @@
 pipeline {
-	agent master
+	agent { master }
 	options { disableConcurrentBuilds() }
     stages {
 		channel = "#general"

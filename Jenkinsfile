@@ -20,7 +20,7 @@ pipeline {
 						}
 					} catch (err) {
 						currentBuild.result = 'FAILURE'
-						slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
+						slackSend channel: env.channel, color: 'danger', teamDomain: null, token: null,
 						message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
 					}
 				}

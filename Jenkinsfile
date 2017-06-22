@@ -4,6 +4,9 @@ pipeline {
 	environment {
 		channel = "#general"
 	}
+	parameters {
+        	string(name: 'PERSON', defaultValue: 'Itai Ganot', description: 'Who should I say hello to?')
+	}
 	stages {
 		stage ('Downloading project') {
 			steps {
@@ -11,7 +14,10 @@ pipeline {
 					try {
 						node {
 							checkout scm
-							sh(returnStdout: true, script: "ls -l").trim()
+							sh(returnStdout: true, script: """
+								ls -l
+								echo "Hello ${params.PERSON}"
+							""").trim()
 						}
 					} catch (err) {
 						currentBuild.result = 'FAILURE'

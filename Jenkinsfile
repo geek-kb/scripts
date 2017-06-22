@@ -4,24 +4,26 @@ pipeline {
 	stages {
 		stage ('Downloading project') {
 			steps {
-				channel = "#general"
-				try {
-					node {
-						checkout scm
-					}
-				} catch (err) {
-					currentBuild.result = 'FAILURE'
-					slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
-					message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
+				environment {
+					channel = "#general"
 				}
-			}
+					try {
+						node {
+							checkout scm
+						}
+					} catch (err) {
+						currentBuild.result = 'FAILURE'
+						slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
+						message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
+					}
+				}
 		}	
 		stage ('whatever') {
 			steps {
 				print "Current build result: ${currentBuild.result}"
 			}
 		}
-		
+			
 		stage ('results') {
 			steps {
 				if (!currentBuild.result) {

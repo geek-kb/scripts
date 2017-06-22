@@ -2,9 +2,9 @@ pipeline {
 	agent any
 	options { disableConcurrentBuilds() }
 	stages {
-		stage('Setup'){
-			stage ('Downloading project') {
-			channel = "#general"
+		stage ('Downloading project') {
+			step {
+				channel = "#general"
 				try {
 					node {
 						checkout scm
@@ -15,16 +15,21 @@ pipeline {
 					message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
 				}
 			}
-		}
-
+		}	
 		stage ('whatever') {
-			print "Current build result: ${currentBuild.result}"
+			step {
+				print "Current build result: ${currentBuild.result}"
+			}
 		}
-
-		if (!currentBuild.result) {
-			currentBuild.result = 'SUCCESS'
-			slackSend channel: channel, color: 'good', teamDomain: null, token: null,
-			message: "*Pipeline built successfully!* ${env.JOB_NAME}*! (<!here|here>)"
+		
+		stage ('results') {
+			step {
+				if (!currentBuild.result) {
+					currentBuild.result = 'SUCCESS'
+					slackSend channel: channel, color: 'good', teamDomain: null, token: null,
+					message: "*Pipeline built successfully!* ${env.JOB_NAME}*! (<!here|here>)"
+				}
+			}
 		}
 	}
 }

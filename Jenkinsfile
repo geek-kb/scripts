@@ -9,8 +9,6 @@ pipeline {
 					node {
 						checkout scm
 					}
-				}
-
 				} catch (err) {
 					currentBuild.result = 'FAILURE'
 					slackSend channel: channel, color: 'danger', teamDomain: null, token: null,

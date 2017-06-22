@@ -14,6 +14,7 @@ pipeline {
 					slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
 					message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
 				}
+			}
 		}
 
 		stage ('whatever') {

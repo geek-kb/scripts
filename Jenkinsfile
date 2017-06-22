@@ -1,11 +1,11 @@
 pipeline {
 	agent any
 	options { disableConcurrentBuilds() }
+	environment {
+		channel = "#general"
+	}
 	stages {
 		stage ('Downloading project') {
-			environment {
-				channel = "#general"
-			}
 			steps {
 				try {
 					node {

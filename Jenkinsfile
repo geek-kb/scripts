@@ -4,7 +4,6 @@ pipeline {
 		disableConcurrentBuilds()
 		timeout(time: 2, unit: 'MINUTES') 
 	}
-	params {}
 	environment {
 		channel = "#general"
 		jenkins_creds = "polling-user"

@@ -4,7 +4,7 @@ pipeline {
 	environment {
 		channel = "#general"
 		jenkins_creds = "polling-user"
-        	def PERSON = "Itai Ganot"
+	        def PERSON = "Itai Ganot"
 	}
 	stages {
 		stage ('Downloading project') {
@@ -25,16 +25,16 @@ pipeline {
 						message: "*Failed to build ${env.JOB_NAME}*! :x: (<!here|here>)"
 					}
 				}
-			}	
+			}
 		}
 		stage ('whatever') {
 			steps {
 				script {
 					currentBuild.displayName = "# ${BUILD_NUMBER} | ${BRANCH_NAME}"
 				}
-			}	
+			}
 		}
-			
+	
 		stage ('results') {
 			steps {
 				script {
@@ -50,11 +50,10 @@ pipeline {
 						currentBuild.result = 'SUCCESS'
 						slackSend channel: channel, color: 'good', teamDomain: null, token: null,
 						message: "*Pipeline built successfully by ${issuer}!* ${env.JOB_NAME}*! (<!here|here>)"
-					echo "Pipeline finished successfully, started by ${issuer}!"
+						echo "Pipeline finished successfully, started by $issuerr!"
 					}
-				}
+				}		
 			}
 		}
 	}
 }
-

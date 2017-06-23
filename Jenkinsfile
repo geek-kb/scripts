@@ -56,6 +56,9 @@ pipeline {
 							echo "Pipeline finished successfully, started by $issuer!"
 							slackSend channel: channel, color: 'good', teamDomain: null, token: null,
 							message: "*Pipeline built successfully by ${issuer}!* ${env.JOB_NAME}*! (<!here|here>)"
+						} else {
+							slackSend channel: channel, color: 'good', teamDomain: null, token: null,
+							message: "*Pipeline built successfully!* ${env.JOB_NAME}*! (<!here|here>)"
 						}
 					}
 				}		

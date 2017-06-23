@@ -27,6 +27,7 @@ pipeline {
 				}
 			}
 		}
+
 		stage ('whatever') {
 			steps {
 				script {
@@ -56,4 +57,3 @@ pipeline {
 			}
 		}
 	}
-}

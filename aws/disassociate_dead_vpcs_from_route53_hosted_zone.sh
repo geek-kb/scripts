@@ -1,10 +1,12 @@
 #!/bin/bash
+# When a VPC which is associated to a Route53 zone is deleted, the association remains.
+# This script handles the deletion of such Route53 associations.
 if [[ -z "$1" ]]; then
 	echo "Please supply AWS region!"
 	exit 1
 fi
 region=$1
-hostedzoneid="Z1ZOGSXD2823ZV"
+hostedzoneid="AAAABBBCCC123"
 for currentvpc in $(aws ec2 describe-vpcs | grep VpcId | awk '{print $2}' | tr -d '\"|,'); do crvpc_arr+=($currentvpc); done
 for asvpc in $(aws route53 get-hosted-zone --id $hostedzoneid | grep VPCId | awk '{print $2}' | tr -d '\"|,'); do asvpc_arr+=($asvpc); done
 deadvpcs_arr=()

@@ -1,0 +1,36 @@
+node {
+	stage('Checkout'){
+		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/geek-kb/scripts.git']]])
+	}
+
+	stage('Build') {
+		def num = sh("""
+		ls -l
+		num=\$(find . -type f | wc -l)
+		""")
+		echo "Number of files: "+num
+	}
+
+	stage('End'){
+		sh(returnStdout: true, script:"ls -l")
+	}
+
+	if (!currentBuild.result) {
+		withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+					credentialsId: 'polling-user', usernameVariable: 'J_USER', 
+					passwordVariable: 'J_PASS'],
+					]){
+						cmd = "curl -s --insecure -u ${J_USER}:${J_PASS} ${BUILD_URL}api/json | python -mjson.tool | grep fullName | awk 'NR==1' | cut -d'\"' -f4 | tr -d '\n' "
+						issuer = sh(returnStdout: true, script: cmd)
+					}
+		currentBuild.result = 'SUCCESS'
+		if(issuer){
+			echo "Pipeline finished successfully, started by $issuer!"
+			slackSend channel: 'general', color: 'good', teamDomain: null, token: null,
+			message: "*Pipeline built successfully by ${issuer}!* ${env.JOB_NAME}*! (<!here|here>)"
+		} else {
+			slackSend channel: 'general', color: 'good', teamDomain: null, token: null,
+			message: "*Pipeline built successfully!* ${env.JOB_NAME}*! (<!here|here>)"
+		}
+	}
+}

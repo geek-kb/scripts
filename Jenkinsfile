@@ -21,7 +21,7 @@ stage ('whatever') {
 if ("${currentBuild.result}"=='null') {
 	currentBuild.result = 'SUCCESS'
 	print "Current build result: ${currentBuild.result}"
-	slackSend channel: channel, color: 'danger', teamDomain: null, token: null,
+	slackSend channel: channel, color: 'good', teamDomain: null, token: null,
 	message: "*Pipeline built successfully!* ${env.JOB_NAME}*! :x: (<!here|here>)"
 	echo "Pipeline finished successfully"
 }
